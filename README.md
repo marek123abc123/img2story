@@ -3,6 +3,10 @@
 ## Run
 python main.py
 ## 
+1. click on bild auswählen (choose picture)
+2. click on beschreibung generieren (generate description)
+3. click on geschichte generieren (generate story)
+## 
 
 ## Requirements
 pip install -r requirements.txt

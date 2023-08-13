@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Captioning</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">Image Captioning</h1>
+        <div class="image-container">
+            <label for="image-input" class="button">Bild auswählen
+                <input type="file" id="image-input" accept="image/*">
+            </label>
+            <img id="image-preview" class="image" src="" alt="Vorschau">
+        </div>
+        <div class="button-container">
+            <button class="button neo-button" onclick="processImage()">Beschreibung generieren</button>
+            <button class="button neo-button" onclick="generateStory()">Geschichte generieren</button>
+        </div>
+        <div class="text-container">
+            <textarea id="caption-text" class="textarea" readonly></textarea>
+            <textarea id="story-text" class="textarea" readonly></textarea>
+        </div>
+    </div>
+
+    <script>
+        function processImage() {
+            var fileInput = document.getElementById('image-input');
+            var previewImage = document.getElementById('image-preview');
+            var captionText = document.getElementById('caption-text');
+
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+
+                // Send the base64 encoded image to the Python function
+                eel.process_image(e.target.result)(function(result) {
+                    captionText.value = result;
+                });
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+        function generateStory() {
+            var captionText = document.getElementById('caption-text');
+            var storyText = document.getElementById('story-text');
+
+            eel.generate_story()(function(result) {
+                storyText.value = result;
+            });
+        }
+    </script>
+
+    <script src="eel.js"></script>
+    <script>
+        eel.expose(process_image);
+        eel.expose(generate_story);
+    </script>
+</body>
+</html>
